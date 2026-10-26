@@ -1,0 +1,1279 @@
+<title>TEAM Games Night</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+/* === HALLOWEEN SCOREBOARD ===
+   Layout: tab SPA, full-width dark surfaces, pumpkin-fire accents
+   Palette: near-black bg, pumpkin orange, candlelight gold, stone grey */
+
+:root {
+  --bg:          #0b0704;
+  --bg2:         #160d06;
+  --surface:     #1e1108;
+  --surface2:    #281608;
+  --surface3:    #33200c;
+  --border:      #3d2710;
+  --border-hi:   #7a4a1a;
+  --fg:          #f0e0c8;
+  --fg-muted:    #9a7a52;
+  --fg-dim:      #4a3320;
+  --orange:      #e07828;
+  --orange-hi:   #f59030;
+  --gold:        #f5a820;
+  --amber:       #c44e12;
+  --pumpkin:     #d05a18;
+  --silver:      #b0b8c0;
+  --bronze:      #c07830;
+  --glow-o:      rgba(224,120,40,0.18);
+  --glow-g:      rgba(245,168,32,0.22);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+/* Atmospheric vignette */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(100,35,5,0.55) 0%, transparent 100%),
+    radial-gradient(ellipse 60% 50% at 0% 100%, rgba(50,18,3,0.7) 0%, transparent 100%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(50,18,3,0.7) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+}
+
+/* ─── Header ─── */
+.app-header {
+  text-align: center;
+  padding: 28px 0 0;
+}
+.app-header h1 {
+  font-family: 'Creepster', cursive;
+  font-size: clamp(2.6rem, 8vw, 5.2rem);
+  color: var(--orange-hi);
+  text-shadow: 0 0 40px rgba(224,120,40,0.8), 0 2px 10px rgba(0,0,0,0.9);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.app-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-top: 8px;
+}
+
+/* ─── Tabs ─── */
+.tabs-nav {
+  display: flex;
+  gap: 3px;
+  margin-top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0;
+  padding: 9px 18px;
+  border: none;
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--fg); background: var(--surface2); }
+.tab-btn.active {
+  background: var(--pumpkin);
+  color: var(--fg);
+  box-shadow: 0 0 18px rgba(208,90,24,0.5);
+}
+.tab-btn.tab-board.active {
+  background: linear-gradient(135deg, #c44e12, #e07828);
+}
+
+/* ─── Panels ─── */
+.tab-panel { display: none; padding-top: 20px; }
+.tab-panel.active { display: block; }
+
+/* ─── Cards ─── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+}
+.card + .card, .card + .card-gap { margin-top: 14px; }
+
+.card-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+}
+
+/* ─── Form ─── */
+label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.67rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 6px;
+}
+input[type="text"], input[type="number"], textarea, select {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--fg);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 10px 13px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus, textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px var(--glow-o); }
+textarea { resize: vertical; min-height: 90px; }
+select option { background: #160d06; }
+
+.field-stack { display: flex; flex-direction: column; gap: 16px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--pumpkin), var(--amber));
+  color: var(--fg);
+  box-shadow: 0 4px 18px rgba(208,90,24,0.38);
+}
+.btn-primary:hover { box-shadow: 0 4px 28px rgba(208,90,24,0.6); transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { border-color: var(--border-hi); color: var(--fg); }
+.btn-sm { padding: 7px 13px; font-size: 0.65rem; }
+.btn-full { width: 100%; }
+.btn-danger-text {
+  background: none;
+  border: none;
+  color: #b03030;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.btn-danger-text:hover { background: rgba(176,48,48,0.12); }
+
+/* ─── Toggle ─── */
+.toggle-group {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  overflow: hidden;
+}
+.tog {
+  padding: 7px 13px;
+  border: none;
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.tog.on { background: var(--orange); color: var(--fg); }
+.tog:not(.on):hover { background: var(--surface3); }
+
+/* ─── Games config ─── */
+.games-list { display: flex; flex-direction: column; gap: 8px; }
+.game-cfg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.game-num {
+  font-family: 'Creepster', cursive;
+  font-size: 1.6rem;
+  color: var(--orange);
+  min-width: 30px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.game-cfg input { flex: 1; min-width: 100px; padding: 8px 11px; font-size: 0.85rem; }
+
+/* ─── Player chips ─── */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 11px;
+  font-size: 0.78rem;
+  color: var(--fg);
+}
+.chip-btn {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px 11px;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.chip-btn:hover { border-color: var(--orange); color: var(--orange-hi); }
+
+/* ─── Team builder ─── */
+.team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .team-grid { grid-template-columns: 1fr; } }
+
+.team-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.team-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.team-card-head input { padding: 7px 10px; font-size: 0.83rem; font-weight: 600; }
+.team-members { display: flex; flex-direction: column; gap: 4px; min-height: 32px; }
+.member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 8px 4px 11px;
+  font-size: 0.8rem;
+}
+.member-rm {
+  background: none;
+  border: none;
+  color: var(--fg-dim);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.member-rm:hover { color: #e04040; background: rgba(224,64,64,0.1); }
+.unassigned-pool {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--surface2);
+  border: 1px dashed var(--border-hi);
+  border-radius: 8px;
+}
+.pool-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 8px;
+}
+.no-members { color: var(--fg-dim); font-size: 0.75rem; padding: 2px 0; }
+
+/* ─── Scoreboard table ─── */
+.sb-wrap { overflow-x: auto; }
+.sb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.sb-table th {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.sb-table th.c { text-align: center; }
+.sb-table th.r { text-align: right; }
+.sb-table td { padding: 13px 12px; border-bottom: 1px solid var(--border); }
+.sb-table tr:last-child td { border-bottom: none; }
+.sb-table tr:hover td { background: rgba(255,255,255,0.015); }
+
+.sb-rank {
+  width: 44px;
+  font-family: 'Creepster', cursive;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--fg-dim);
+}
+.sb-rank.r1 { color: var(--gold); text-shadow: 0 0 14px var(--glow-g); }
+.sb-rank.r2 { color: var(--silver); }
+.sb-rank.r3 { color: var(--bronze); }
+
+.sb-name { font-weight: 600; font-size: 0.93rem; }
+.sb-gpts {
+  text-align: center;
+  min-width: 56px;
+  font-size: 0.82rem;
+  color: var(--fg-dim);
+}
+.sb-gpts.p3 { color: var(--gold); font-weight: 600; }
+.sb-gpts.p2 { color: var(--silver); font-weight: 600; }
+.sb-gpts.p1 { color: var(--bronze); font-weight: 600; }
+.sb-total {
+  text-align: right;
+  font-family: 'Creepster', cursive;
+  font-size: 1.7rem;
+  color: var(--orange-hi);
+  line-height: 1;
+  padding-right: 6px;
+}
+.sb-total.leader { color: var(--gold); text-shadow: 0 0 10px var(--glow-g); }
+
+/* ─── Game scoring ─── */
+.score-rows { display: flex; flex-direction: column; gap: 7px; }
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  transition: border-color 0.15s;
+}
+.score-row:hover { border-color: var(--border-hi); }
+.score-name { flex: 1; font-weight: 600; font-size: 0.92rem; min-width: 0; }
+.place-btns { display: flex; gap: 5px; flex-shrink: 0; }
+
+.pb {
+  width: 46px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg-dim);
+  font-family: 'Creepster', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s, box-shadow 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.pb:hover { border-color: var(--border-hi); color: var(--fg-muted); }
+.pb.p1.on { background: rgba(245,168,32,0.18); border-color: var(--gold); color: var(--gold); box-shadow: 0 0 8px rgba(245,168,32,0.3); }
+.pb.p2.on { background: rgba(176,184,192,0.15); border-color: var(--silver); color: var(--silver); }
+.pb.p3.on { background: rgba(192,120,48,0.18); border-color: var(--bronze); color: var(--bronze); }
+.pb.clr.on { border-color: var(--border-hi); color: var(--fg-muted); }
+
+.pts-preview {
+  flex-shrink: 0;
+  min-width: 52px;
+  text-align: right;
+  font-family: 'Creepster', cursive;
+  font-size: 1.3rem;
+  color: var(--fg-dim);
+  line-height: 1;
+}
+.pts-preview.live { color: var(--orange-hi); }
+
+/* ─── Points key ─── */
+.pts-key {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 14px;
+}
+.key-lbl { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-dim); }
+.key-item { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.ki-badge { font-family: 'Creepster', cursive; font-size: 1.05rem; line-height: 1; }
+.ki-badge.k1 { color: var(--gold); }
+.ki-badge.k2 { color: var(--silver); }
+.ki-badge.k3 { color: var(--bronze); }
+
+/* ─── Empty state ─── */
+.empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--fg-muted);
+}
+.empty-icon { font-size: 2.8rem; margin-bottom: 10px; opacity: 0.5; }
+.empty p { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.1em; }
+
+/* ─── Reset confirmation ─── */
+.reset-confirm {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(176,48,48,0.12);
+  border: 1px solid rgba(176,48,48,0.4);
+  border-radius: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.reset-confirm.show { display: flex; }
+.reset-confirm p { flex: 1; min-width: 160px; font-size: 0.8rem; color: #e08080; font-family: 'Cinzel', serif; letter-spacing: 0.05em; }
+
+/* ─── Toast ─── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: max(24px, env(safe-area-inset-right, 0px));
+  background: var(--surface2);
+  border: 1px solid var(--orange);
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--orange-hi);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  z-index: 200;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ─── Score tracker ─── */
+.score-mode-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.score-mode-bar .mode-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  flex-shrink: 0;
+}
+
+.tracker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  transition: border-color 0.15s;
+}
+.tracker-row:hover { border-color: var(--border-hi); }
+
+.tracker-rank {
+  flex-shrink: 0;
+  width: 36px;
+  font-family: 'Creepster', cursive;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--fg-dim);
+  text-align: center;
+}
+.tracker-rank.r1 { color: var(--gold); text-shadow: 0 0 10px var(--glow-g); }
+.tracker-rank.r2 { color: var(--silver); }
+.tracker-rank.r3 { color: var(--bronze); }
+
+.tracker-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.92rem;
+  min-width: 0;
+}
+
+.score-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  overflow: hidden;
+}
+.sc-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--surface3);
+  color: var(--fg-muted);
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+.sc-btn:hover { background: var(--border-hi); color: var(--fg); }
+.sc-btn.minus:hover { color: #e06060; }
+.sc-btn.plus:hover { color: var(--orange-hi); }
+
+.sc-val {
+  width: 52px;
+  text-align: center;
+  background: var(--bg2);
+  border: none;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  color: var(--fg);
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  padding: 6px 4px;
+  outline: none;
+}
+.sc-val:focus { background: var(--surface3); color: var(--orange-hi); }
+
+/* tracker summary bar */
+.tracker-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.tracker-lead {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+}
+.tracker-lead strong { color: var(--gold); font-weight: 700; }
+
+/* ─── Misc ─── */
+.row-actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+hr.sep { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 40px rgba(224,120,40,0.8), 0 2px 10px rgba(0,0,0,0.9); }
+  50%       { text-shadow: 0 0 60px rgba(224,120,40,1),   0 2px 10px rgba(0,0,0,0.9); }
+}
+.app-header h1 { animation: glow-pulse 4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .app-header h1 { animation: none; }
+}
+
+@media (max-width: 560px) {
+  .pb { width: 40px; height: 33px; font-size: 0.88rem; }
+  .score-name { font-size: 0.83rem; }
+  .pts-preview { min-width: 44px; font-size: 1.1rem; }
+}
+</style>
+
+<div class="app">
+  <header class="app-header">
+    <h1>🎃 TEAM Games Night</h1>
+    <p class="app-subtitle" id="app-subtitle">Halloween 2026</p>
+  </header>
+
+  <nav class="tabs-nav" id="tabs-nav">
+    <button class="tab-btn active" data-tab="setup">⚙ Setup</button>
+    <button class="tab-btn tab-board" data-tab="board">💀 Scoreboard</button>
+  </nav>
+
+  <!-- SETUP -->
+  <div class="tab-panel active" id="tab-setup">
+    <div class="card">
+      <div class="card-label">Event Details</div>
+      <div class="field-stack">
+        <div>
+          <label for="ev-name">Event Name</label>
+          <input type="text" id="ev-name" value="TEAM Halloween Games Night 2026">
+        </div>
+        <div class="field-row">
+          <div>
+            <label for="num-games">Number of Games</label>
+            <input type="number" id="num-games" min="1" max="20" value="3">
+          </div>
+          <div>
+            <label>Scoring</label>
+            <div style="padding:10px 0;font-size:0.82rem;color:var(--fg-muted);">
+              🥇 1st = 3 &nbsp;🥈 2nd = 2 &nbsp;🥉 3rd = 1
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Players</div>
+      <div class="field-stack">
+        <div>
+          <label for="players-in">Player Names</label>
+          <textarea id="players-in" placeholder="One per line, or comma-separated — paste a list right in"></textarea>
+        </div>
+        <div id="players-prev" style="display:none;">
+          <div class="card-label" style="margin-bottom:8px;">Added</div>
+          <div class="chips" id="players-chips"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Games</div>
+      <div class="games-list" id="games-cfg"></div>
+    </div>
+
+    <div id="team-setup"></div>
+
+    <div style="margin-top:18px;">
+      <button class="btn btn-primary btn-full" id="start-btn" onclick="startNight()">
+        🎃 Begin the Night
+      </button>
+    </div>
+
+    <div id="reset-zone" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="btn-danger-text" onclick="showResetConfirm()">↺ Reset Everything</button>
+      </div>
+      <div class="reset-confirm" id="reset-confirm">
+        <p>This clears all scores and setup. Are you sure?</p>
+        <button class="btn btn-ghost btn-sm" onclick="hideResetConfirm()">Cancel</button>
+        <button class="btn btn-sm" style="background:#7a1515;color:var(--fg);" onclick="doReset()">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCOREBOARD -->
+  <div class="tab-panel" id="tab-board">
+    <div class="card" id="sb-card">
+      <div class="empty">
+        <div class="empty-icon">💀</div>
+        <p>Complete setup to see standings</p>
+      </div>
+    </div>
+    <div class="pts-key">
+      <span class="key-lbl">Points</span>
+      <span class="key-item"><span class="ki-badge k1">1st</span> = 3 pts</span>
+      <span class="key-item"><span class="ki-badge k2">2nd</span> = 2 pts</span>
+      <span class="key-item"><span class="ki-badge k3">3rd</span> = 1 pt</span>
+      <span class="key-item" style="color:var(--fg-dim);">Ties share position</span>
+    </div>
+  </div>
+
+  <!-- Game panels injected by JS -->
+</div>
+
+<div class="toast" id="toast">Saved ✓</div>
+
+<script>
+// ═══════════════════════════════════
+//  STATE
+// ═══════════════════════════════════
+const STORE_KEY = 'teamGamesNight_v2';
+
+let S = {
+  eventName: 'TEAM Halloween Games Night 2026',
+  ready: false,
+  numGames: 3,
+  players: [],      // string[]
+  games: []         // { id, name, type:'individual'|'team', teams:[{name,players[]}], results:{[key]:0|1|2|3} }
+};
+
+function load() {
+  try {
+    const s = localStorage.getItem(STORE_KEY);
+    if (s) S = JSON.parse(s);
+  } catch(_) {}
+}
+
+function save() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch(_) {}
+  flashToast();
+}
+
+function flashToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 1400);
+}
+
+// ═══════════════════════════════════
+//  INIT
+// ═══════════════════════════════════
+load();
+syncGames();
+renderSetup();
+renderTabs();
+renderScoreboard();
+
+// ═══════════════════════════════════
+//  SETUP RENDERING
+// ═══════════════════════════════════
+function renderSetup() {
+  document.getElementById('ev-name').value = S.eventName;
+  document.getElementById('num-games').value = S.numGames;
+  document.getElementById('players-in').value = S.players.join('\n');
+  document.getElementById('app-subtitle').textContent = S.eventName;
+  renderPlayerPrev();
+  renderGamesCfg();
+  renderTeamSetup();
+  document.getElementById('reset-zone').style.display = S.ready ? 'block' : 'none';
+}
+
+// Event name
+document.getElementById('ev-name').addEventListener('input', e => {
+  S.eventName = e.target.value.trim() || 'TEAM Games Night';
+  document.getElementById('app-subtitle').textContent = S.eventName;
+});
+
+// Num games
+document.getElementById('num-games').addEventListener('input', e => {
+  S.numGames = Math.min(20, Math.max(1, parseInt(e.target.value) || 1));
+  syncGames();
+  renderGamesCfg();
+  renderTeamSetup();
+});
+
+// Players
+document.getElementById('players-in').addEventListener('input', e => {
+  S.players = parsePlayers(e.target.value);
+  renderPlayerPrev();
+  renderTeamSetup();
+});
+
+function parsePlayers(raw) {
+  const lines = raw.includes('\n') ? raw.split('\n') : raw.split(',');
+  return [...new Set(lines.map(p => p.trim()).filter(Boolean))];
+}
+
+function renderPlayerPrev() {
+  const box = document.getElementById('players-prev');
+  const chips = document.getElementById('players-chips');
+  if (!S.players.length) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  chips.innerHTML = S.players.map(p => `<span class="chip">${h(p)}</span>`).join('');
+}
+
+function syncGames() {
+  while (S.games.length < S.numGames) {
+    const n = S.games.length + 1;
+    S.games.push({ id: n, name: `Game ${n}`, type: 'individual', teams: [], results: {}, scoreMode: 'track', scoreDir: 'high', scores: {} });
+  }
+  S.games.length = S.numGames;
+}
+
+function renderGamesCfg() {
+  const el = document.getElementById('games-cfg');
+  el.innerHTML = S.games.map((g, i) => `
+    <div class="game-cfg">
+      <span class="game-num">${i + 1}</span>
+      <input type="text" value="${h(g.name)}" placeholder="Game ${i+1} name"
+        oninput="S.games[${i}].name = this.value || 'Game ${i+1}'; refreshGameTabLabel(${i})">
+      <div class="toggle-group">
+        <button class="tog ${g.type==='individual'?'on':''}" onclick="setGameType(${i},'individual')">Individual</button>
+        <button class="tog ${g.type==='team'?'on':''}" onclick="setGameType(${i},'team')">Team</button>
+      </div>
+    </div>`).join('');
+}
+
+function setGameType(i, type) {
+  S.games[i].type = type;
+  if (type === 'individual') { S.games[i].teams = []; S.games[i].results = {}; }
+  renderGamesCfg();
+  renderTeamSetup();
+}
+
+// ─── Team builder ───
+function renderTeamSetup() {
+  const box = document.getElementById('team-setup');
+  const teamGames = S.games.filter(g => g.type === 'team');
+  if (!teamGames.length) { box.innerHTML = ''; return; }
+
+  box.innerHTML = teamGames.map(g => {
+    const gi = S.games.indexOf(g);
+    if (!g.teams.length) g.teams = [{ name: 'Team 1', players: [] }, { name: 'Team 2', players: [] }];
+    const assigned = new Set(g.teams.flatMap(t => t.players));
+    const unassigned = S.players.filter(p => !assigned.has(p));
+    return `
+      <div class="card" style="margin-top:14px;">
+        <div class="card-label">👥 ${h(g.name)} — Teams</div>
+        <div class="team-grid">
+          ${g.teams.map((t, ti) => `
+            <div class="team-card">
+              <div class="team-card-head">
+                <input type="text" value="${h(t.name)}" placeholder="Team name"
+                  oninput="S.games[${gi}].teams[${ti}].name=this.value||'Team ${ti+1}'">
+                ${g.teams.length > 2 ? `<button class="member-rm" onclick="rmTeam(${gi},${ti})">✕</button>` : ''}
+              </div>
+              <div class="team-members">
+                ${t.players.length ? t.players.map(p => `
+                  <div class="member-row">
+                    <span>${h(p)}</span>
+                    <button class="member-rm" onclick="rmFromTeam(${gi},${ti},'${js(p)}')">✕</button>
+                  </div>`).join('') : '<div class="no-members">No players assigned</div>'}
+              </div>
+            </div>`).join('')}
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-ghost btn-sm" onclick="addTeam(${gi})">+ Add Team</button>
+        </div>
+        ${unassigned.length ? `
+          <div class="unassigned-pool">
+            <div class="pool-lbl">Unassigned — click a name to add to the smallest team</div>
+            <div class="chips">${unassigned.map(p =>
+              `<button class="chip-btn" onclick="assignPlayer(${gi},'${js(p)}')">${h(p)}</button>`
+            ).join('')}</div>
+          </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function addTeam(gi) { S.games[gi].teams.push({ name: `Team ${S.games[gi].teams.length+1}`, players: [] }); renderTeamSetup(); }
+function rmTeam(gi, ti) { S.games[gi].teams.splice(ti, 1); S.games[gi].results = {}; renderTeamSetup(); }
+function rmFromTeam(gi, ti, p) { S.games[gi].teams[ti].players = S.games[gi].teams[ti].players.filter(x => x !== p); renderTeamSetup(); }
+function assignPlayer(gi, p) {
+  const teams = S.games[gi].teams;
+  const target = teams.reduce((a, b) => a.players.length <= b.players.length ? a : b);
+  if (!target.players.includes(p)) target.players.push(p);
+  S.games[gi].results = {};
+  renderTeamSetup();
+}
+
+// ═══════════════════════════════════
+//  START
+// ═══════════════════════════════════
+function startNight() {
+  if (!S.players.length) { alert('Add at least one player first!'); return; }
+  syncGames();
+  S.ready = true;
+  save();
+  document.getElementById('reset-zone').style.display = 'block';
+  renderTabs();
+  renderScoreboard();
+  switchTab('board');
+}
+
+// ═══════════════════════════════════
+//  TABS
+// ═══════════════════════════════════
+function renderTabs() {
+  const nav = document.getElementById('tabs-nav');
+  nav.querySelectorAll('.tab-game').forEach(b => b.remove());
+  document.querySelectorAll('.tab-panel-game').forEach(p => p.remove());
+  if (!S.ready) return;
+
+  S.games.forEach((g, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn tab-game';
+    btn.id = `tab-btn-game-${i}`;
+    btn.dataset.tab = `game-${i}`;
+    btn.textContent = g.name || `Game ${i+1}`;
+    nav.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'tab-panel tab-panel-game';
+    panel.id = `tab-game-${i}`;
+    document.querySelector('.app').appendChild(panel);
+    renderGamePanel(i);
+  });
+
+  nav.addEventListener('click', e => {
+    const b = e.target.closest('.tab-btn');
+    if (b) switchTab(b.dataset.tab);
+  });
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(`tab-${id}`);
+  if (panel) panel.classList.add('active');
+  const btn = document.querySelector(`[data-tab="${id}"]`);
+  if (btn) btn.classList.add('active');
+}
+
+function refreshGameTabLabel(i) {
+  const btn = document.getElementById(`tab-btn-game-${i}`);
+  if (btn) btn.textContent = S.games[i].name || `Game ${i+1}`;
+}
+
+// ═══════════════════════════════════
+//  GAME PANELS
+// ═══════════════════════════════════
+function renderGamePanel(gi) {
+  const panel = document.getElementById(`tab-game-${gi}`);
+  if (!panel) return;
+  const g = S.games[gi];
+  const mode = g.scoreMode || 'track';
+  const dir  = g.scoreDir  || 'high';
+  const parts = g.type === 'team' ? g.teams.map(t => t.name) : S.players;
+  const places = getGamePlaces(gi);
+
+  const rankIcon = r => r===1?'🥇':r===2?'🥈':r===3?'🥉':'—';
+  const rankCls  = r => r===1?'r1':r===2?'r2':r===3?'r3':'';
+
+  // ── mode/dir controls bar ──
+  const modeBar = `
+    <div class="score-mode-bar">
+      <span class="mode-lbl">Scoring</span>
+      <div class="toggle-group">
+        <button class="tog ${mode==='track'?'on':''}" onclick="setScoreMode(${gi},'track')">Track Scores</button>
+        <button class="tog ${mode==='manual'?'on':''}" onclick="setScoreMode(${gi},'manual')">Assign Places</button>
+      </div>
+      ${mode==='track' ? `
+        <div class="toggle-group">
+          <button class="tog ${dir==='high'?'on':''}" onclick="setScoreDir(${gi},'high')">Highest Wins</button>
+          <button class="tog ${dir==='low'?'on':''}" onclick="setScoreDir(${gi},'low')">Lowest Wins</button>
+        </div>` : ''}
+    </div>`;
+
+  // ── track mode rows ──
+  const trackRows = () => {
+    if (!parts.length) return `<div class="empty"><div class="empty-icon">⚠️</div><p>No ${g.type==='team'?'teams':'players'} found</p></div>`;
+    const scores = g.scores || {};
+    // sort for display by current score
+    const d = dir === 'low' ? 1 : -1;
+    const sorted = [...parts].sort((a,b) => d*((scores[b]||0)-(scores[a]||0)));
+    const allZero = sorted.every(p => (scores[p]||0) === 0);
+
+    return sorted.map(p => {
+      const place = places[p] || 0;
+      return `
+        <div class="tracker-row">
+          <div class="tracker-rank ${!allZero && place ? rankCls(place) : ''}">${!allZero && place ? rankIcon(place) : '—'}</div>
+          <span class="tracker-name">${h(p)}</span>
+          <div class="score-ctrl">
+            <button class="sc-btn minus" onclick="setScore(${gi},'${js(p)}',-1)">−</button>
+            <input class="sc-val" type="number" value="${scores[p]||0}"
+              onchange="setScore(${gi},'${js(p)}',0,parseInt(this.value)||0)"
+              onclick="this.select()">
+            <button class="sc-btn plus" onclick="setScore(${gi},'${js(p)}',1)">+</button>
+          </div>
+        </div>`;
+    }).join('');
+  };
+
+  // ── manual mode rows ──
+  const manualRows = () => {
+    if (!parts.length) return `<div class="empty"><div class="empty-icon">⚠️</div><p>No ${g.type==='team'?'teams':'players'} found</p></div>`;
+    return parts.map(p => {
+      const place = g.results[p] || 0;
+      const pts = [0,3,2,1][place] || 0;
+      return `
+        <div class="score-row">
+          <span class="score-name">${h(p)}</span>
+          <div class="place-btns">
+            <button class="pb p1 ${place===1?'on':''}" onclick="setPlace(${gi},'${js(p)}',1)" title="1st — 3 pts">1st</button>
+            <button class="pb p2 ${place===2?'on':''}" onclick="setPlace(${gi},'${js(p)}',2)" title="2nd — 2 pts">2nd</button>
+            <button class="pb p3 ${place===3?'on':''}" onclick="setPlace(${gi},'${js(p)}',3)" title="3rd — 1 pt">3rd</button>
+            <button class="pb clr ${place>0?'on':''}" onclick="setPlace(${gi},'${js(p)}',0)" title="Clear">✕</button>
+          </div>
+          <div class="pts-preview ${pts>0?'live':''}">
+            ${pts>0 ? pts+'pt' : '—'}
+          </div>
+        </div>`;
+    }).join('');
+  };
+
+  // ── tracker footer: who's leading ──
+  const trackerFooter = () => {
+    if (mode !== 'track' || !parts.length) return '';
+    const scores = g.scores || {};
+    const allZero = parts.every(p => (scores[p]||0) === 0);
+    if (allZero) return `<div class="tracker-footer"><span class="tracker-lead">No scores yet — hit <strong style="color:var(--orange-hi);">+</strong> to start tracking</span></div>`;
+    const leader = Object.entries(places).find(([,v]) => v === 1);
+    const tied = Object.entries(places).filter(([,v]) => v === 1);
+    const leaderText = tied.length > 1
+      ? `Tied 1st: <strong>${tied.map(([n])=>h(n)).join(' & ')}</strong>`
+      : leader ? `Leading: <strong>${h(leader[0])}</strong>` : '';
+    return `<div class="tracker-footer"><span class="tracker-lead">${leaderText}</span></div>`;
+  };
+
+  panel.innerHTML = `
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+        <div class="card-label" style="margin:0;">${h(g.name)}</div>
+        <span style="font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;color:var(--fg-muted);text-transform:uppercase;">
+          ${g.type==='team'?'👥 Team':'👤 Individual'}
+        </span>
+      </div>
+      ${modeBar}
+      <div class="${mode==='track'?'score-rows':'score-rows'}">
+        ${mode==='track' ? trackRows() : manualRows()}
+      </div>
+      ${trackerFooter()}
+      ${parts.length ? `
+        <div class="row-actions">
+          <button class="btn btn-ghost btn-sm" onclick="clearGame(${gi})">Clear</button>
+          <button class="btn btn-primary btn-sm" onclick="saveGame(${gi})">Save Results</button>
+        </div>` : ''}
+    </div>`;
+}
+
+function setPlace(gi, p, place) {
+  const cur = S.games[gi].results[p] || 0;
+  S.games[gi].results[p] = (cur === place) ? 0 : place;
+  renderGamePanel(gi);
+  renderScoreboard();
+}
+
+// ─── Score tracker helpers ───
+function getGamePlaces(gi) {
+  const g = S.games[gi];
+  // Ensure legacy games without scoreMode default to manual
+  const mode = g.scoreMode || 'manual';
+  if (mode === 'manual') return g.results || {};
+
+  const parts = g.type === 'team' ? g.teams.map(t => t.name) : S.players;
+  const scores = g.scores || {};
+  // Only rank if any score differs from 0
+  const vals = parts.map(p => scores[p] || 0);
+  const allZero = vals.every(v => v === 0);
+  if (allZero) return {};
+
+  const dir = g.scoreDir === 'low' ? 1 : -1;
+  const sorted = [...parts].sort((a, b) => dir * ((scores[b]||0) - (scores[a]||0)));
+
+  const places = {};
+  let rank = 1;
+  sorted.forEach((p, i) => {
+    if (i > 0 && (scores[p]||0) !== (scores[sorted[i-1]]||0)) rank = i + 1;
+    places[p] = rank <= 3 ? rank : 0;
+  });
+  return places;
+}
+
+function setScore(gi, p, delta, absolute) {
+  if (!S.games[gi].scores) S.games[gi].scores = {};
+  const cur = S.games[gi].scores[p] || 0;
+  S.games[gi].scores[p] = absolute !== undefined ? absolute : cur + delta;
+  renderGamePanel(gi);
+  renderScoreboard();
+}
+
+function setScoreMode(gi, mode) {
+  S.games[gi].scoreMode = mode;
+  renderGamePanel(gi);
+}
+
+function setScoreDir(gi, dir) {
+  S.games[gi].scoreDir = dir;
+  renderGamePanel(gi);
+  renderScoreboard();
+}
+
+function clearGame(gi) {
+  S.games[gi].results = {};
+  S.games[gi].scores = {};
+  renderGamePanel(gi);
+  renderScoreboard();
+}
+
+function saveGame(gi) {
+  save();
+  renderScoreboard();
+  const btn = document.querySelector(`[data-tab="game-${gi}"]`);
+  if (btn) {
+    const prev = btn.style.background;
+    btn.style.background = 'rgba(80,180,80,0.25)';
+    setTimeout(() => btn.style.background = '', 700);
+  }
+}
+
+// ═══════════════════════════════════
+//  SCOREBOARD
+// ═══════════════════════════════════
+function calcPoints() {
+  const out = {};
+  S.players.forEach(p => { out[p] = { total: 0, perGame: new Array(S.games.length).fill(null) }; });
+
+  S.games.forEach((g, gi) => {
+    const places = getGamePlaces(gi);
+    if (g.type === 'individual') {
+      S.players.forEach(p => {
+        const place = places[p] || 0;
+        const pts = [0,3,2,1][place] || 0;
+        if (!out[p]) out[p] = { total: 0, perGame: new Array(S.games.length).fill(null) };
+        if (place > 0) { out[p].perGame[gi] = pts; out[p].total += pts; }
+      });
+    } else {
+      g.teams.forEach(t => {
+        const place = places[t.name] || 0;
+        const pts = [0,3,2,1][place] || 0;
+        t.players.forEach(p => {
+          if (!out[p]) out[p] = { total: 0, perGame: new Array(S.games.length).fill(null) };
+          if (place > 0) { out[p].perGame[gi] = pts; out[p].total += pts; }
+        });
+      });
+    }
+  });
+  return out;
+}
+
+function renderScoreboard() {
+  const card = document.getElementById('sb-card');
+  if (!S.ready || !S.players.length) {
+    card.innerHTML = `<div class="empty"><div class="empty-icon">💀</div><p>Complete setup to see standings</p></div>`;
+    return;
+  }
+
+  const pts = calcPoints();
+  const sorted = [...S.players].sort((a, b) => (pts[b]?.total||0) - (pts[a]?.total||0));
+
+  // assign display ranks
+  let rank = 1;
+  sorted.forEach((p, i) => {
+    if (i > 0 && (pts[p]?.total||0) < (pts[sorted[i-1]]?.total||0)) rank = i + 1;
+    pts[p].rank = rank;
+  });
+
+  const maxTotal = pts[sorted[0]]?.total || 0;
+
+  const gameHeaders = S.games.map(g =>
+    `<th class="c" style="font-size:0.58rem;">${h(g.name)}</th>`).join('');
+
+  const rows = sorted.map(p => {
+    const d = pts[p] || { total: 0, perGame: [], rank: 99 };
+    const isLeader = d.rank === 1 && d.total > 0;
+    const rankDisp = d.total > 0
+      ? (d.rank===1 ? '🥇' : d.rank===2 ? '🥈' : d.rank===3 ? '🥉' : d.rank)
+      : '—';
+    const rankCls = d.total > 0 && d.rank <= 3 ? `r${d.rank}` : '';
+
+    const gameCells = (d.perGame||[]).map(gp =>
+      `<td class="sb-gpts ${gp===3?'p3':gp===2?'p2':gp===1?'p1':''}">${gp!==null?gp:'—'}</td>`
+    ).join('');
+
+    return `
+      <tr>
+        <td class="sb-rank ${rankCls}">${rankDisp}</td>
+        <td class="sb-name">${h(p)}</td>
+        ${gameCells}
+        <td class="sb-total ${isLeader?'leader':''}">${d.total}</td>
+      </tr>`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="card-label" style="margin-bottom:16px;">Overall Standings</div>
+    <div class="sb-wrap">
+      <table class="sb-table">
+        <thead><tr>
+          <th style="width:46px;">#</th>
+          <th>Player</th>
+          ${gameHeaders}
+          <th class="r">Pts</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ═══════════════════════════════════
+//  RESET
+// ═══════════════════════════════════
+function showResetConfirm() { document.getElementById('reset-confirm').classList.add('show'); }
+function hideResetConfirm() { document.getElementById('reset-confirm').classList.remove('show'); }
+function doReset() {
+  S = { eventName: 'TEAM Halloween Games Night 2026', ready: false, numGames: 3, players: [], games: [] };
+  try { localStorage.removeItem(STORE_KEY); } catch(_) {}
+  document.querySelectorAll('.tab-game').forEach(b => b.remove());
+  document.querySelectorAll('.tab-panel-game').forEach(p => p.remove());
+  syncGames();
+  renderSetup();
+  renderScoreboard();
+  switchTab('setup');
+  hideResetConfirm();
+}
+
+// ═══════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════
+function h(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function js(s) { return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+</script>
