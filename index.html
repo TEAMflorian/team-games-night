@@ -1018,7 +1018,7 @@ function renderGamePanel(gi) {
     if (!parts.length) return `<div class="empty"><div class="empty-icon">⚠️</div><p>No ${g.type==='team'?'teams':'players'} found</p></div>`;
     const scores = g.scores || {};
     // sort for display by current score
-    const d = dir === 'low' ? 1 : -1;
+    const d = dir === 'low' ? -1 : 1;
     const sorted = [...parts].sort((a,b) => d*((scores[b]||0)-(scores[a]||0)));
     const allZero = sorted.every(p => (scores[p]||0) === 0);
 
@@ -1117,7 +1117,7 @@ function getGamePlaces(gi) {
   const allZero = vals.every(v => v === 0);
   if (allZero) return {};
 
-  const dir = g.scoreDir === 'low' ? 1 : -1;
+  const dir = g.scoreDir === 'low' ? -1 : 1;
   const sorted = [...parts].sort((a, b) => dir * ((scores[b]||0) - (scores[a]||0)));
 
   const places = {};
